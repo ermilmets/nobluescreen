@@ -11,7 +11,8 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['category'] = Category.objects.all()
+        context['category'] = Platform.objects.all()
+        return context
 
 
 class ProductDetailView(DetailView):
@@ -29,7 +30,7 @@ class CreateFeedbackView(CreateView, LoginRequiredMixin):
     context_object_name = 'ratings'
     success_url = reverse_lazy('home')  # necessary?
     # django class based views override
-    Product.objects.update(total_rating=69)
+    # Product.objects.update(total_rating=69)
 
 
 class UpdateFeedbackView(UpdateView, LoginRequiredMixin):
