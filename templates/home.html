@@ -1,1 +1,31 @@
 <h1>Hello from home.html</h1>
+here are the products
+{% for product in products %}
+    <div>
+        <h2><a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a></h2>
+        <p>Average Rating: {{ product.average_rating|default_if_none:"No ratings yet" }}</p>
+        <p>{{ product.description }}</p>
+    </div>
+{% endfor %}
+
+<a href="/admin/">Admin site</a>
+
+<a href="{% url 'signup' %}">Sign Up!</a>
+
+{% if not user.is_authenticated %}
+    <a href="{% url 'login' %}">Log in</a>
+{% endif %}
+<p>
+    {% if user.is_authenticated %}
+        <div>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">
+                    Log out
+                </button>
+            </form>
+        </div>
+
+    {% endif %}
+
+
