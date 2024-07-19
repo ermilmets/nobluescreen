@@ -24,3 +24,68 @@
 .star-rating label:hover ~ label {
     color: #f5b301;
 }
+/*--------------------------------*/
+.star-rating-div {
+    /*clear: both;*/
+    /*unicode-bidi: bidi-override;*/
+    /*float: right;*/
+    /*direction: initial;*/
+    padding-top: -20px;
+    font-size: 1.5em;
+    position: relative;
+    color: #ccc;
+    width: 4.15em; /* 5 stars, 1em each */
+    height: 1em;
+    /*width: 133px;*/
+    /*border: solid 1px red;*/
+    display: inline-block;
+}
+
+.star-rating-div::before {
+    content: "★★★★★";
+    color: #ccc; /* Grey color for background stars */
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    top: 0;
+    left: 0;
+    /*display: block;*/
+    /*width: min-content;*/
+}
+
+.star-rating-div::after {
+    content: "★★★★★";
+    color: #f5b301; /* Gold color for filled stars */
+    position: absolute;
+    z-index: 2;
+    /*width: 0;*/
+    width: var(--rating-percentage, 0);
+    overflow: hidden;
+    white-space: nowrap;
+    top: 0;
+    left: 0;
+    /*display: block;*/
+    /*border: solid 1px red;*/
+}
+
+/*.star-rating-div[data-rating="1"]::after { width: 20%; }*/
+/*.star-rating-div[data-rating="1.5"]::after { width: 30%; }*/
+/*.star-rating-div[data-rating="2"]::after { width: 40%; }*/
+/*.star-rating-div[data-rating="2.5"]::after { width: 50%; }*/
+/*.star-rating-div[data-rating="3"]::after { width: 60%; }*/
+/*.star-rating-div[data-rating="3.5"]::after { width: 70%; }*/
+/*.star-rating-div[data-rating="4"]::after { width: 80%; }*/
+/*.star-rating-div[data-rating="4.5"]::after { width: 90%; }*/
+/*.star-rating-div[data-rating="5"]::after { width: 100%; }*/
+
+
+.image-hover img {
+    transition: all 0.4s ease;
+}
+
+.image-hover img:hover {
+    transform: scale(1.2);
+
+}
+
+

@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView, CreateView, UpdateView, DeleteView, FormView, ListView
 from products.models import *
@@ -17,7 +17,6 @@ class HomePageView(ListView):  # TemplateView
         context = super().get_context_data()
         context['platform'] = Platform.objects.all()
         context['genres'] = Genre.objects.all()
-
         return context
 
 
@@ -31,6 +30,8 @@ class ProductDetailView(DetailView, FormView):
         context = super().get_context_data(**kwargs)
         product = self.get_object()
         context['average_rating'] = product.average_rating()
+        context['product_ratings'] = ProductRating.objects.all()
+        # context['platform'] = Platform.objects.all()
         if self.request.user.is_authenticated:
             try:
                 context['user_rating'] = ProductRating.objects.get(product=product, user=self.request.user)
@@ -57,8 +58,23 @@ class ProductDetailView(DetailView, FormView):
         return redirect('product_detail', pk=self.object.id)   # product_id=self.get_object().id
 
 
-class GamePlatformView(TemplateView):  # based on chosen category, shows games only on chosen platform
+class GamePlatformView(ListView):  # based on chosen category, shows games only on chosen platform
+    model = Product
     template_name = 'game_platform.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        platform = self.kwargs['platform']
+        self.platform = get_object_or_404(Platform, slug=platform)
+        return Product.objects.filter(platform=self.platform)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['platform'] = Platform.objects.all()
+        context['platform'] = self.platform
+        context['product_ratings'] = ProductRating.objects.all()
+
+        return context
 
 
 class CreateFeedbackView(CreateView, LoginRequiredMixin):

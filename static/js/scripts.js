@@ -8,3 +8,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// document.addEventListener('DOMContentLoaded', function () {
+//             var starRatingElement = document.querySelector('.star-rating-div');
+//             var rating = parseFloat(starRatingElement.getAttribute('data-rating'));
+//             var percentage = (rating / 5) * 100;
+//             starRatingElement.style.setProperty('--rating-percentage', percentage + '%');
+//         });
+document.addEventListener('DOMContentLoaded', function () {
+            var starRatings = document.querySelectorAll('.star-rating-div');
+            starRatings.forEach(function (starRatingElement) {
+                var rating = parseFloat(starRatingElement.getAttribute('data-rating'));
+                var percentage = (rating / 5) * 100;
+                starRatingElement.style.setProperty('--rating-percentage', percentage + '%');
+            });
+        });
+
+
+
+
+
+
+
