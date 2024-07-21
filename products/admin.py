@@ -11,6 +11,7 @@ admin.site.register(Genre)
 admin.site.register(ProductRating)
 admin.site.register(FeaturedGame)
 admin.site.register(AgeRating)
+# admin.site.register(ProductConsole)
 
 
 
