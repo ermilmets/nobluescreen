@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ product.name }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
@@ -34,10 +35,12 @@ Rating:
     (Not rated yet)
 {% else %}
     ({{ product.ratings.count }} reviews)
-    <p>
-        <button type="button" id="addtocart">Add To Cart</button>
-    </p>
 {% endif %}
+<p>
+    <form method="post" action="{% url 'add_to_cart' product.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Add to Cart</button>
+    </form>
 {#{% if user_rating %}#}
 {#        <p>Your Rating:</p>#}
 {#        <div class="star-rating-div" data-rating="{{ user_rating.star_rating }}">#}
@@ -63,11 +66,11 @@ Rating:
 {% endif %}
 <br>
 <h3>{% if product.ratings.count == 0 %}
-    No reviews yet...
+    No reviews yet
 {% elif product.ratings.count == 1 %}
-    1 Review:
+    Review (1):
 {% else %}
-    {{ product.ratings.count }} Reviews:
+    Reviews ({{ product.ratings.count }}):
 {% endif %}
 </h3>
 {% for rating in product_ratings %}

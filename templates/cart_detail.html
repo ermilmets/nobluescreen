@@ -1,0 +1,30 @@
+{% load multiply %}
+<html>
+<head>
+    <title>Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Shopping Cart</h1>
+    {% if cart.cartitem_set.all %}
+        <ul class="list-group mb-4">
+            {% for item in cart.cartitem_set.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ item.product.name }} - {{ item.quantity }} x ${{ item.product.price }}
+                    <span class="badge badge-primary badge-pill">${{ item.quantity|multiply:item.product.price }}</span>
+                    <form method="post" action="{% url 'remove_from_cart' item.product.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm ml-3">Remove</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+<p style="text-align: center;">Return to <a href="{% url 'home' %}">homepage</a></p>
+</div>
+</body>
+</html>
