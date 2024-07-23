@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
 <div class="slideshow">
-    <div><img src="https://via.placeholder.com/200x75" alt="Slide 1"></div>
-    <div><img src="https://via.placeholder.com/200x75" alt="Slide 2"></div>
-    <div><img src="https://via.placeholder.com/200x75" alt="Slide 3"></div>
+    <div><img src="{% static 'images/futuristic.jpg' %}" alt="Slide 1"></div>
+    <div><img src="{% static 'images/gaming.jpg' %}" alt="Slide 2"></div>
+    <div><img src="{% static 'images/gaming_never_die.jpg' %}" alt="Slide 3"></div>
+    <div><img src="{% static 'images/halo.jpg' %}" alt="Slide 4"></div>
+    <div><img src="{% static 'images/stalker.jpg' %}" alt="Slide 5"></div>
 </div>
 
 <h1>Featured Games</h1>
@@ -27,3 +30,4 @@
     {% endfor %}
 </div>
 {% endblock %}
+

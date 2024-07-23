@@ -143,10 +143,23 @@
 
         .slideshow {
             background-color: #ddd;
-            height: 300px;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+        }
+
+        .slideshow img {
+            width: auto;
+            height: auto;
+            max-width: auto; /* Ensure images don't exceed the container's width */
+            max-height: 400px; /* You can adjust the max height as needed */
+            object-fit: contain; /* Ensure the images fit within the specified dimensions without being cropped */
+            margin: 0; /* Remove default margin */
+        }
+
+        .slick-slide {
+            margin: 0; /* Remove margin between slides */
         }
 
         .external-links {
@@ -279,6 +292,7 @@
             });
     });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script type="text/javascript">
     $(document).ready(function(){
@@ -287,7 +301,9 @@
             infinite: true,
             speed: 500,
             slidesToShow: 1,
-            adaptiveHeight: true
+            adaptiveHeight: true,
+            margin: 0, /* Remove margin between slides */
+            padding: 0 /* Remove padding between slides */
         });
     });
     </script>
