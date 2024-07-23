@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="slideshow">
+    Slideshow
+</div>
+
+<h1>Featured Games</h1>
+<div class="featured-games">
+    {% for game in featured_games %}
+        <div class="product-card">
+            <img src="{{ game.product.image.url }}" alt="{{ game.product.name }}">
+            <div class="product-info">
+                <h2>{{ game.product.name }}</h2>
+                <p>{{ game.product.description }}</p>
+                <p>Price: ${{ game.product.price }}</p>
+                <p>Stock: {{ game.product.number_in_stock }}</p>
+                <p>Rating: <span class="rating">{% for i in game.product.total_rating|to_int %}<i class="fas fa-star"></i>{% endfor %}</span></p>
+                <a href="{% url 'product_detail' game.product.pk %}" class="add-to-cart">View Details</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

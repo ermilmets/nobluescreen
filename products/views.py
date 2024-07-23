@@ -174,9 +174,27 @@ class DeleteFeedbackView(DeleteView, LoginRequiredMixin):
     context_object_name = 'ratings'
     success_url = reverse_lazy('home')   # success_url = '/'
 
+def cart_detail(request):
+    return render(request, 'cart/cart_detail.html')
+def section2(request):
+    return render(request, 'section2.html')
+def section3(request):
+    return render(request, 'section3.html')
 
+def section4(request):
+    return render(request, 'section4.html')
 
+def section5(request):
+    return render(request, 'section5.html')
 
+def section6(request):
+    return render(request, 'section6.html')
 
+def section7(request):
+    return render(request, 'section7.html')
 
+def section8(request):
+    return render(request, 'section8.html')
 
+def section9(request):
+    return render(request, 'section9.html')

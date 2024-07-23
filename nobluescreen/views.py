@@ -32,3 +32,4 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, "registration/signup.html", {'form': form})
+
