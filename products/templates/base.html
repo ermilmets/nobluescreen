@@ -7,6 +7,8 @@
     <title>{% block title %}NoBlueScreen{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -275,6 +277,18 @@
                 weatherWidget.innerHTML = `Failed to load weather data`;
                 console.error('Error fetching weather data:', error);
             });
+    });
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.slideshow').slick({
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            adaptiveHeight: true
+        });
     });
     </script>
 </body>
