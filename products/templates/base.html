@@ -5,10 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}NoBlueScreen{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +15,6 @@
             margin: 0;
             padding: 0;
         }
-
         header {
             background-color: #333;
             color: #fff;
@@ -26,53 +24,43 @@
             align-items: center;
             flex-wrap: wrap;
         }
-
         .logo {
             flex: 1;
         }
-
         .search-bar {
             flex: 2;
         }
-
         .weather-widget {
             flex: 1;
             text-align: right;
         }
-
         .user-actions {
             flex: 2;
             text-align: right;
         }
-
         .user-actions a {
             color: #fff;
             margin: 0 10px;
             text-decoration: none;
         }
-
         .user-actions a.active {
             font-weight: bold;
             color: yellow;
         }
-
         .dropdowns {
             background-color: #444;
             padding: 10px;
             text-align: right;
         }
-
         .dropdown {
             position: relative;
             display: inline-block;
         }
-
         .dropdown a {
             color: #fff;
             margin: 0 10px;
             text-decoration: none;
         }
-
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -83,104 +71,86 @@
             min-width: 120px;
             padding: 5px 0;
         }
-
         .dropdown-menu a {
             color: #000;
             padding: 8px 12px;
             text-decoration: none;
             display: block;
         }
-
         .dropdown-menu a:hover {
             background-color: #ddd;
         }
-
         .dropdown:hover .dropdown-menu {
             display: block;
         }
-
         .dropdown-menu-right {
             right: 0;
             left: auto;
         }
-
         main {
             padding: 20px;
         }
-
         footer {
             background-color: #333;
             color: #fff;
             text-align: center;
             padding: 10px 0;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
         }
-
         .sidebar {
             flex: 1;
             background-color: #fff;
             padding: 10px;
             margin-right: 20px;
         }
-
         .content {
             flex: 3;
             background-color: #fff;
             padding: 10px;
         }
-
         .features {
             flex: 1;
             background-color: #fff;
             padding: 10px;
             margin-left: 20px;
         }
-
         .slideshow {
             background-color: #ddd;
             display: flex;
-            length: 20px;
             justify-content: center;
             align-items: center;
             overflow: hidden;
         }
-
         .slideshow img {
             width: auto;
             height: auto;
-            max-width: 100%; /* Ensure images don't exceed the container's width */
-            max-height: 400px; /* You can adjust the max height as needed */
-            object-fit: contain; /* Ensure the images fit within the specified dimensions without being cropped */
-            margin: 0; /* Remove default margin */
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            margin: 0;
         }
-
         .slick-slide {
-            margin: 0; /* Remove margin between slides */
+            margin: 0;
         }
-
         .external-links {
             margin-top: 20px;
             background-color: #ddd;
             padding: 10px;
             text-align: center;
         }
-
         .external-links a {
             margin: 0 10px;
             text-decoration: none;
         }
-
         .additional-text {
             margin-top: 20px;
             background-color: #fff;
             padding: 20px;
         }
-
         .active {
             font-weight: bold;
             color: yellow;
@@ -193,8 +163,7 @@
             <h1>NoBlueScreen</h1>
         </div>
         <div class="search-bar">
-            <script async src="https://cse.google.com/cse.js?cx=70c6dae7cc4564a36">
-            </script>
+            <script async src="https://cse.google.com/cse.js?cx=70c6dae7cc4564a36"></script>
             <div class="gcse-search"></div>
         </div>
         <div class="weather-widget" id="weather-widget">
@@ -272,6 +241,9 @@
     <footer>
         <p>&copy; 2023 NoBlueScreen. All rights reserved.</p>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const apiKey = '5549b8bea1f894abb4e1ec8505cdf482';
@@ -303,8 +275,8 @@
             speed: 500,
             slidesToShow: 1,
             adaptiveHeight: true,
-            margin: 0, /* Remove margin between slides */
-            padding: 0 /* Remove padding between slides */
+            margin: 0,
+            padding: 0
         });
     });
     </script>
