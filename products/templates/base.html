@@ -144,6 +144,7 @@
         .slideshow {
             background-color: #ddd;
             display: flex;
+            length: 20px;
             justify-content: center;
             align-items: center;
             overflow: hidden;
@@ -152,7 +153,7 @@
         .slideshow img {
             width: auto;
             height: auto;
-            max-width: auto; /* Ensure images don't exceed the container's width */
+            max-width: 100%; /* Ensure images don't exceed the container's width */
             max-height: 400px; /* You can adjust the max height as needed */
             object-fit: contain; /* Ensure the images fit within the specified dimensions without being cropped */
             margin: 0; /* Remove default margin */
