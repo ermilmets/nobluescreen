@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, Sum
 from django.utils.text import slugify
 
 
@@ -70,7 +70,7 @@ class Product(models.Model):  # Game
         pass
 
     def __str__(self):
-        return f"{self.name} (rating: {self.average_rating()})"
+        return f"{self.name} (rating: {self.total_rating})"  # average_rating
 
 
 class ProductRating(models.Model):  # for giving feedback/comments
@@ -109,7 +109,7 @@ class Cart(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username}"
+        return f"cart of {self.user.username}"
 
 
 class CartItem(models.Model):
@@ -118,27 +118,42 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     # date_added = models.DateTimeField(auto_now_add=True)
 
+    def total(self):
+        total_sum = CartItem.objects.all()
+        return total_sum
+
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
 
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # for non_registered orders
-    number = models.PositiveIntegerField(default=0)  # for numbering the orders
-    items = models.ManyToManyField(CartItem)
+    # number = models.PositiveIntegerField(default=0)  # for numbering the orders
+    ordered_items = models.ManyToManyField(Product, through='OrderItem')  # NOT NEEDED I THINK!??
     # quantity = models.PositiveIntegerField(default=1)  # needed? in CartItem maybe
-    # name = models.CharField(max_length=100, null=False, blank=False)
+    first_name = models.CharField(max_length=100, null=False, blank=True)
+    last_name = models.CharField(max_length=100, null=False, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)  # the billing address for user
+    city = models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=100, null=True, blank=True)
+    email = models.CharField(max_length=100, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)   # or date_time?
-    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # the cost of all items, not needed?
+    # total = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # the cost of all items, not needed?
     order_complete = models.BooleanField(default=False)
-    # shipping info needed (address, phone, something else?
+    # shipping info needed (address, phone, something else?)
 
     def __str__(self):
-        return f"{self.user}: {self.total}"
+        return f"{self.user}: order_id: {self.id}"
 
 
+class OrderItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    order = models.ForeignKey(Order,related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} of {self.product.name}"
 
 
 # class ProductConsole(models.Model):

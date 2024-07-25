@@ -1,47 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ product.name }}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-<h2>Platform: {{ platform.name }}</h2>
-<a href="{% url 'home' %}">Homepage</a>
-<h3>List of Games</h3>
-{% for product in products %}
-    <div>
-        <h2>{{ product.name }}</h2>
-        {% if product.image %}
-            <a href="{% url 'product_detail' product.pk %}" class="image-hover">
-            <img src="{{ product.image.url }}" alt="image of game" width="120" height="100">
-            </a>
-        {% else %}
-            'Product image placeholder'
-        {% endif %}
-        <p>{{ product.description }}</p>
-        <div class="star-rating-div" data-rating="{{ product.average_rating }}">
-        </div>
-        {% if product.ratings.count == 1 %}
-            ({{ product.ratings.count }} review)
-        {% elif product.ratings.count == 0 %}
-            (Not rated yet)
-        {% else %}
-            ({{ product.ratings.count }} reviews)
-        {% endif %}
-        {#    {{ product.ratings.last }} #}
+<h2 style="text-align: center;">{{ platforms.first }} Games</h2>  {# platform #}
+{#<h3>List of Games</h3>#}
+<div class="container mt-5 box">
+    {#    <div class="alert alert-success" id="cart-alert" style="display: none;"></div>#}
+    <div class="row row-cols-1 row-cols-md-4 g-3">
+        {% for product in products %}
+            <div class="col">
+                <div class="card" style="height: 520px; text-align: center; border-radius: 20px; padding-bottom: 20px;">
+                    {#                <h3>{{ product.name }}</h3>#}
+                    <div style="max-height: 220px; padding-top: 15px;">
+                        {% if product.image %}
+                            <a href="{% url 'product_detail' product.pk %}" class="image-hover">
+                                <img src="{{ product.image.url }}" alt="image of game"
+                                     style="max-width: 100%; max-height: 100%;">
+                            </a>
+                        {% else %}
+                            'Product image missing'
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 80px;">
+                            <h4>{{ product.name }}</h4>
+                            <p style="font-size: 15px;">{{ product.platform }}</p></div>
+                        <div style="text-align: center; display: inline-block;">
+                            <p class="star-rating-div"
+                               data-rating="{{ product.total_rating }}"></p></div>
+                        <div style="margin-top: 20px; position: relative; text-align: center;">
+                            {% if product.ratings.count == 1 %}
+                                ({{ product.ratings.count }} review)
+                            {% elif product.ratings.count == 0 %}
+                                (Not rated yet)
+                            {% else %}
+                                ({{ product.ratings.count }} reviews)
+                            {% endif %}
+                        </div>
+                        <div style="font-size: 25px;">€{{ product.price }}</div>
+                    </div>
+                    <div class="card-text">
+                        <div>
+                            {% if product.number_in_stock > 0 %}
+                                <div>in stock</div>
+                                <div>
+                                    <form method="post" action="{% url 'add_to_cart' product.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div>
+                                    <div>out of stock</div>
+                                    <form method="post" action="{% url 'add_to_cart' product.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary" disabled>Sold Out</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    <p>Price: {{ product.price }} €</p>
-    <p><a href="{% url 'product_detail' product.pk %}">Details</a></p>
-{#    <button type="button" id="addtocart">Add To Cart</button>#}
-    <form method="post" action="{% url 'add_to_cart' product.id %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Add to Cart</button>
-    </form>
-{% endfor %}
-<p>
-<script src="{% static 'js/scripts.js' %}"></script>
-</body>
-</html>
+</div>
+<br>
+<br>
+{% endblock %}
 

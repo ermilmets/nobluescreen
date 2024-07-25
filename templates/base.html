@@ -1,1 +1,226 @@
-<h1>Hello from base.html</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>NoBlueScreen</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <script src="{% static 'js/scripts.js' %}"></script>
+</head>
+<body>
+{#<header>#}
+{#    <h3>Sample header for important info!</h3>#}
+{#</header>#}
+<div class="div-logo-area">
+    <div id="main-logo">
+        {% comment %}<a href="index.html">
+        <img src="{% static 'images\foxlogo.png' %}" height="80" width="80"></a>{% endcomment %}
+        <a href="{% url 'home' %}"><img src="{% static 'images/nobluescreenlogo.png' %}" height="120" width="390"
+                                        alt="Nobluscreenlogo"></a>
+    </div>
+    <div style="clear: right;"></div>
+    <a class="cart-icon" href="{% url 'cart_detail' %}">
+        <i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+    <div class="weather-widget" id="weather-widget" style="text-align: center; font-size: 20px; pointer-events: none;">
+        Loading weather...
+    </div>
+    {#    <div class="search-container-top">#}
+    {#        <input type="text" placeholder="Search for products..." name="topsearch">#}
+    {#        <button type="submit"><i class="fa fa-search"></i></button>#}
+    {#    </div>#}
+    <!--    <a href="#"><i class="fa fa-shopping-cart" style="display: inline-block; font-size: 30px;"></i></a>-->
+    <br class="clear-float">
+</div>
+<nav>
+    <!--    <a href="{% url 'home'%}" class="main-icon"><i class="fa fa-fw fa-home" aria-hidden="true"-->
+    <!--                                                                 style="padding-right: 0px;"></i>Home</a>-->
+    <div class="mydropdown">
+        <button class="button-main-icon" type="button"><img src="{% static 'images/gamepadicon.png' %}" height="45"
+                                                            width="45" alt="gamepadicon"></button>
+    <span class="games-icon">Game Platform</span>
+        <div class="mydropdown-content2">
+            {% for singleplatform in platform %}
+                <a href="{% url 'gameplatform' singleplatform.slug %}">{{ singleplatform.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="search-container">
+        {% if user.is_authenticated %}
+            <div class="mydropdown" style="color: white; padding-top: 15px; font-size: 20px; padding-right: 10px;">
+                <p style="pointer-events: none;">User: {{ user.username }}</p>
+            </div>
+            <div class="mydropdown" style="color: white; font-size: 25px;padding-top: 10px; pointer-events: none;">|
+            </div>
+            <div class="mydropdown">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" id="logout-button">Log Out <i class="fa fa-user-times" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            <div class="mydropdown" style="color: white;">
+                <div><a href="{% url 'login' %}">Login <i class="fa fa-user-circle" aria-hidden="true"></i></a></div>
+            </div>
+            <div class="mydropdown" style="color: white; font-size: 25px;padding-top: 10px; pointer-events: none;">|
+            </div>
+            <div class="mydropdown" style="color: white; padding-right: 20px;">
+                <div><a href="{% url 'signup' %}">Sign Up <i class="fa fa-user-plus" aria-hidden="true"></i></a></div>
+            </div>
+        {% endif %}
+        {#            <div class="mydropdown">#}
+        {#                <button class="button-lang">#}
+        {#                    EN#}
+        {#                    <i class="fa fa-angle-down"></i></button>#}
+        {#                <div class="mydropdown-content" id="dropdown-lang">#}
+        {#                    <a href="#">ET</a>#}
+        {#                    <a href="#">RU</a>#}
+        {#                </div>#}
+        {#            </div>#}
+        <div class="mydropdown">
+            <button type="button"><i class="fa fa-bars"></i></button>
+            <div class="mydropdown-content">
+                <a href="contactus.html">
+                    <div><i class="fa fa-envelope" aria-hidden="true"></i>
+                        <div class="dropdown-icon-alignment">Contact Us</div>
+                    </div>
+                </a>
+                <a href="contactus.html">
+                    <div><i class="fa fa-cog" aria-hidden="true"></i>
+                        <div class="dropdown-icon-alignment">About Us</div>
+                    </div>
+                </a>
+                <p class="dropdown-seperator"></p>
+                {% if user.is_authenticated %}
+                    <a href="/admin/">
+                        <div><i class="fa fa-user-circle" aria-hidden="true"></i>
+                            <div class="dropdown-icon-alignment">{{ user.username }}</div>
+                        </div>
+                    </a>
+                    <a href="{% url 'cart_detail' %}">
+                        <div><i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            <div class="dropdown-icon-alignment">Cart</div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}">
+                        <div><i class="fa fa-user-circle" aria-hidden="true"></i>
+                            <div class="dropdown-icon-alignment">Log In</div>
+                        </div>
+                    </a>
+                    <a href="{% url 'signup' %}">
+                        <div><i class="fa fa-user-plus" aria-hidden="true"></i>
+                            <div class="dropdown-icon-alignment">Sign Up</div>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+{% block content %}
+
+{% endblock %}
+<div style="padding-bottom: 100px;">
+</div>
+<footer class="footer">
+    <p style="font-size: 20px; padding-top: 5px;">Subscribe to our newsletter <a href="{% url 'home' %}"
+                                                                                 class="link-word">here</a></p>
+    <p style="font-size: 20px; margin-bottom: -3px; font-weight: bold;">Follow Us!</p>
+    <nav class="bottom-nav">
+        <a href="https://www.twitter.com/home" target="_blank" title="Twitter/X" id="twitter"><i
+                class="fa fa-twitter"></i></a>
+        <a href="https://www.youtube.com" target="_blank" title="YouTube" id="youtube"><i
+                class="fa fa-youtube-play"></i></a>
+        <a href="https://www.instagram.com" target="_blank" title="Instagram" id="instagram"><i
+                class="fa fa-instagram"></i></a>
+        <a href="https://www.facebook.com" target="_blank" title="Facebook" id="facebook"><i
+                class="fa fa-facebook-square"
+                aria-hidden="true"></i></a>
+        <a href="https://ee.linkedin.com/" target="_blank" title="LinkedIn" id="linkedin"><i
+                class="fa fa-linkedin-square"></i></a>
+        <!--    <a href="https://www.google.com" target="_blank" title="Google"><i class="fa fa-envelope"></i></a>-->
+    </nav>
+    <br>
+    <div>
+        <a><b>Made by Ermil | Version 1.01 | All rights reserved <i class="fa fa-copyright"></i>
+        </b></a>
+    </div>
+    <br>
+</footer>
+<script src="{% static 'js/scripts.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const apiKey = '5549b8bea1f894abb4e1ec8505cdf482';
+        const city = 'Tallinn';
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const weatherWidget = document.getElementById('weather-widget');
+                const temperature = data.main.temp;
+                const description = data.weather[0].description;
+                const icon = `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+                weatherWidget.innerHTML = `<img src="${icon}" alt="${description}"> ${temperature}°C, ${description}`;
+            })
+            .catch(error => {
+                const weatherWidget = document.getElementById('weather-widget');
+                weatherWidget.innerHTML = `Failed to load weather data`;
+                console.error('Error fetching weather data:', error);
+            });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const apiKey = '5549b8bea1f894abb4e1ec8505cdf482';
+        const city = 'Tallinn';
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const weatherWidget = document.getElementById('weather-widget');
+                const temperature = data.main.temp;
+                const description = data.weather[0].description;
+                const icon = `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+                weatherWidget.innerHTML = `<img src="${icon}" alt="${description}"> ${temperature}°C, ${description}`;
+            })
+            .catch(error => {
+                const weatherWidget = document.getElementById('weather-widget');
+                weatherWidget.innerHTML = `Failed to load weather data`;
+                console.error('Error fetching weather data:', error);
+            });
+    });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.slideshow').slick({
+            dots: true,
+            infinite: true,
+            speed: 50,
+            slidesToShow: 1,
+            adaptiveHeight: true,
+            margin: 0,
+            padding: 0
+        });
+    });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
