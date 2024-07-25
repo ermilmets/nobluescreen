@@ -1,94 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ product.name }}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-<h1>{{ product.name }}</h1>
-<div>
-    {% if product.image %}
-        <img src="{{ product.image.url }}" alt="image of game">
-    {% else %}
-        'Product image placeholder'
-    {% endif %}
-</div>
-<p>{{ product.description }}</p>
-<p>Platform: <a href="{% url 'gameplatform' product.platform.slug %}">{{ product.platform }}</a></p>
-<p>Genres:
-    {% for genre in product.genre.all %}
-        <ul>
-            <li>{{ genre.name }}</li>
-        </ul>
-    {% endfor %}
-<p>Age rating: {{ product.age_rating }}</p>
-<p>Date of release: {{ product.date_of_release }}</p>
-<p>Price: {{ product.price }} €</p>
-Rating:
-<div class="star-rating-div" data-rating="{{ product.average_rating }}">
-</div>
-{% if product.ratings.count == 1 %}
-    ({{ product.ratings.count }} review)
-{% elif product.ratings.count == 0 %}
-    (Not rated yet)
-{% else %}
-    ({{ product.ratings.count }} reviews)
-{% endif %}
-<p>
-    <form method="post" action="{% url 'add_to_cart' product.id %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Add to Cart</button>
-    </form>
-{#{% if user_rating %}#}
-{#        <p>Your Rating:</p>#}
-{#        <div class="star-rating-div" data-rating="{{ user_rating.star_rating }}">#}
-{#        </div>#}
-{#    {% endif %}#}
-{% if user.is_authenticated %}
-    <h3>Leave a review</h3>
-    <form method="post">
-        {% csrf_token %}
-        <div class="star-rating">
-            {% for i in "12345" %}
-                <input type="radio" id="star{{ forloop.revcounter }}" name="star_rating"
-                       value="{{ forloop.revcounter }}"
-                       {% if user_rating and user_rating.star_rating == forloop.revcounter %}checked{% endif %}>
-                <label for="star{{ forloop.revcounter }}">★</label>
-            {% endfor %}
+<div class="container" style="padding-bottom: 40px;">
+    <div class="card">
+        <h1 style="padding: 20px;">{{ product.name }}</h1>
+        <div style="text-align: center;">
+            {% if product.image %}
+                <a href="{{ product.image.url }}"><img src="{{ product.image.url }}" alt="image of game"></a>
+            {% else %}
+                'Product image placeholder'
+            {% endif %}
         </div>
-        <textarea name="feedback" placeholder="Leave feedback">{{ user_rating.feedback }}</textarea>
-        <button type="submit">Submit Rating</button>
-    </form>
-{% else %}
-    <p><a href="{% url 'login' %}">Log in</a> to rate this product.</p>
-{% endif %}
-<br>
-<h3>{% if product.ratings.count == 0 %}
-    No reviews yet
-{% elif product.ratings.count == 1 %}
-    Review (1):
-{% else %}
-    Reviews ({{ product.ratings.count }}):
-{% endif %}
-</h3>
-{% for rating in product_ratings %}
-    <div>
-        {% if rating.product.name == product.name %}
-            <h4> Review By: {{ rating.user }}</h4>
+        <div style="padding-left: 20px; padding-bottom: 20px;">
+            <p>{{ product.description }}</p>
+            <p>Platform: <a href="{% url 'gameplatform' product.platform.slug %}">{{ product.platform }}</a></p>
+            <p>Genres:
+                {% for genre in product.genre.all %}
+                    <ul>
+                        <li>{{ genre.name }}</li>
+                    </ul>
+                {% endfor %}
+            <p>Age rating: {{ product.age_rating }}</p>
+            <p>Date of release: {{ product.date_of_release }}</p>
+            <p>Price: {{ product.price }} €</p>
+            Rating:
+            <div class="star-rating-div" data-rating="{{ product.average_rating }}">
+            </div>
+            <div style="padding-top: 40px;">
+                {% if product.ratings.count == 1 %}
+                    ({{ product.ratings.count }} review)
+                {% elif product.ratings.count == 0 %}
+                    (Not rated yet)
+                {% else %}
+                    ({{ product.ratings.count }} reviews)
+                {% endif %}</div>
             <p>
-            <div class="star-rating-div" data-rating="{{ rating.star_rating }}">
-            </div> {{ rating.star_rating }}/5
-            <p>Comment: {{ rating.feedback }}
-            </p>
-        {% endif %}
+            <form method="post" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
+            {#{% if user_rating %}#}
+            {#        <p>Your Rating:</p>#}
+            {#        <div class="star-rating-div" data-rating="{{ user_rating.star_rating }}">#}
+            {#        </div>#}
+            {#    {% endif %}#}
+            {% if user.is_authenticated %}
+                <h3>Leave a review</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="star-rating">
+                        {% for i in "12345" %}
+                            <input type="radio" id="star{{ forloop.revcounter }}" name="star_rating"
+                                   value="{{ forloop.revcounter }}"
+                                   {% if user_rating and user_rating.star_rating == forloop.revcounter %}checked{% endif %}>
+                            <label for="star{{ forloop.revcounter }}">★</label>
+                        {% endfor %}
+                    </div>
+                    <textarea name="feedback" placeholder="Leave feedback">{{ user_rating.feedback }}</textarea>
+                    <button type="submit" class="btn btn-info">Submit Rating</button>
+                </form>
+            {% else %}
+                <p><a href="{% url 'login' %}">Log in</a> to rate this product.</p>
+            {% endif %}
+            <br>
+            <h3>{% if product.ratings.count == 0 %}
+                No reviews yet
+            {% elif product.ratings.count == 1 %}
+                Review (1):
+            {% else %}
+                Reviews ({{ product.ratings.count }}):
+            {% endif %}
+            </h3>
+            {% for rating in product_ratings %}
+                <div>
+                    {% if rating.product.name == product.name %}
+                        <h4> Review By: {{ rating.user }}</h4>
+                        <div class="star-rating-div" data-rating="{{ rating.star_rating }}">
+                        </div>
+                        <div style="padding-top: 35px;">{{ rating.star_rating }}/5
+                            <p>Comment: {{ rating.feedback }}
+                            </p></div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        <a href="{% url 'home' %}" class="btn btn-success">Homepage</a>
+        </div>
     </div>
-{% endfor %}
-<script src="{% static 'js/scripts.js' %}"></script>
-</body>
-<a href="{% url 'home' %}">Homepage</a>
-</html>
+</div>
+{% endblock %}
 
 
 

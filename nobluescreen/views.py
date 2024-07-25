@@ -19,6 +19,7 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password'})
 
 
+
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)  # built-in django
