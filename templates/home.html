@@ -1,97 +1,52 @@
 {% extends 'base.html' %}
-
 {% block content %}
 {% load static %}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>{{ product.name }}</title>#}
-{#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">#}
-{#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
-{#    <script#}
-{#            src="https://code.jquery.com/jquery-3.7.1.js"#}
-{#            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="#}
-{#            crossorigin="anonymous"></script>#}
-{#    <script src="{% static 'js/scripts.js' %}"></script>#}
-{#</head>#}
-{#<body>#}
-{#<h1>NoBlueScreen</h1>#}
-{#{% if user.is_authenticated %}#}
-{#    <h4>Logged in as: {{ user.username }}</h4>#}
-{#    <div><a href="{% url 'cart_detail' %}" class="btn btn-success">Cart</a></div>#}
-{#{% endif %}#}
-{#<p>#}
-{#    <a href="/admin/">Admin site</a>#}
-{##}
-{#    <a href="{% url 'signup' %}">Sign Up!</a>#}
-{##}
-{#    {% if not user.is_authenticated %}#}
-{#        <a href="{% url 'login' %}">Log in</a>#}
-{#    {% endif %}#}
-{#<p>#}
-{#    {% if user.is_authenticated %}#}
-{#        <div>#}
-{#            <form action="{% url 'logout' %}" method="post">#}
-{#                {% csrf_token %}#}
-{#                <button type="submit">#}
-{#                    Log out#}
-{#                </button>#}
-{#            </form>#}
-{#        </div>#}
-{#    {% endif %}#}
-{#<h3>Games By Gaming Platforms:</h3>#}
-{#{% for singleplatform in platform %}#}
-{#    <li><a href="{% url 'gameplatform' singleplatform.slug %}">{{ singleplatform.name }}</a></li>#}
-{#{% endfor %}#}
+
 <h2 style="text-align: center;">All Games</h2>
-  <div class="row">
-  <div class="col-md-8 mx-auto">
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="images/futuristic.jpg" data-slide-to="0" class="active"></li>
-        <li data-target="images/gaming.jpg" data-slide-to="1"></li>
-        <li data-target="images/gaming_never_dies.jpg" data-slide-to="2"></li>
-        <li data-target="images/halo.jpg" data-slide-to="4"></li>
-        <li data-target="images/stalker.jpg" data-slide-to="5"></li>
-      </ol>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://marketplace.canva.com/EAE-roy2B2I/1/0/1600w/canva-blue-and-purple-cyberpunk-game-zone-facebook-cover-ZwAs2Ol1HMA.jpg" alt="First slide">
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="images/futuristic.jpg" data-slide-to="0" class="active"></li>
+                <li data-target="images/gaming.jpg" data-slide-to="1"></li>
+                <li data-target="images/gaming_never_dies.jpg" data-slide-to="2"></li>
+                <li data-target="images/halo.jpg" data-slide-to="4"></li>
+                <li data-target="images/stalker.jpg" data-slide-to="5"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://marketplace.canva.com/EAE-roy2B2I/1/0/1600w/canva-blue-and-purple-cyberpunk-game-zone-facebook-cover-ZwAs2Ol1HMA.jpg" alt="First slide">
+                </div>
+                <div class="carousel-item">
+                    <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://www.shutterstock.com/image-vector/futuristic-red-blue-abstract-gaming-600nw-1916887910.jpg" alt="Second slide">
+                </div>
+                <div class="carousel-item">
+                    <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://cdn.statically.io/img/timelinecovers.pro/facebook-cover/thumbs/video-game-collage-gamer-facebook-cover.jpg" alt="Third slide">
+                </div>
+                <div class="carousel-item">
+                    <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://marketplace.canva.com/EAE-xDPcMlI/2/0/1600w/canva-blue-and-red-neon-let%27s-play-gaming-facebook-cover-O46SN0P-smI.jpg" alt="Third slide">
+                </div>
+                <div class="carousel-item">
+                    <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://www.fbcoverlover.com/maker/covers-images/download/Halo-2-Facebook-Covers-FBcoverlover-facebook-cover.jpg" alt="Third slide">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-        <div class="carousel-item">
-          <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://www.shutterstock.com/image-vector/futuristic-red-blue-abstract-gaming-600nw-1916887910.jpg" alt="Second slide">
-        </div>
-        <div class="carousel-item">
-          <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://cdn.statically.io/img/timelinecovers.pro/facebook-cover/thumbs/video-game-collage-gamer-facebook-cover.jpg" alt="Third slide">
-        </div>
-        <div class="carousel-item">
-          <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://marketplace.canva.com/EAE-xDPcMlI/2/0/1600w/canva-blue-and-red-neon-let%27s-play-gaming-facebook-cover-O46SN0P-smI.jpg" alt="Third slide">
-        </div>
-        <div class="carousel-item">
-          <img style="height: 400px; width: 200px;" class="d-block w-100" src="https://www.fbcoverlover.com/maker/covers-images/download/Halo-2-Facebook-Covers-FBcoverlover-facebook-cover.jpg" alt="Third slide">
-        </div>
-      </div>
-      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
     </div>
-  </div>
 </div>
 
-
-{#    -------------------------#}
 <div class="container mt-5 box">
-    {#    <div class="alert alert-success" id="cart-alert" style="display: none;"></div>#}
     <div class="row row-cols-1 row-cols-md-4 g-3">
         {% for product in products %}
             <div class="col">
                 <div class="card" style="height: 520px; text-align: center; border-radius: 20px; padding-bottom: 20px;">
-                    {#                <h3>{{ product.name }}</h3>#}
                     <div style="max-height: 220px; padding-top: 15px;">
                         {% if product.image %}
                             <a href="{% url 'product_detail' product.pk %}" class="image-hover">
@@ -118,9 +73,15 @@
                                 ({{ product.ratings.count }} reviews)
                             {% endif %}
                         </div>
-                        <div style="font-size: 25px;">€{{ product.price }}</div>
+                        <div style="font-size: 25px;">
+                            {% if request.session.currency == 'USD' %}
+                                ${{ product.price_usd }}
+                            {% else %}
+                                €{{ product.price }}
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="card-text"> {# this one #}
+                    <div class="card-text">
                         <div>
                             {% if product.number_in_stock > 0 %}
                                 <div>in stock</div>
@@ -149,4 +110,3 @@
 <br>
 <br>
 {% endblock %}
-

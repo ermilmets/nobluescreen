@@ -1,5 +1,6 @@
 from django.urls import path, include
 from .views import *
+from .views import change_currency
 
 urlpatterns = [
     path("", HomePageView.as_view(), name='home'),   # has to be int:pk
@@ -13,6 +14,7 @@ urlpatterns = [
     path("rating", CreateFeedbackView.as_view(), name='rating'),
     path("rating/update", UpdateFeedbackView.as_view(), name='update_rating'),
     path("rating/confim_delete", DeleteFeedbackView.as_view(), name='confirm_delete'),
+    path('change_currency/', change_currency, name='change_currency'),
 
 ]
 

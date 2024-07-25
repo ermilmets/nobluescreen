@@ -35,6 +35,7 @@ class Product(models.Model):  # Game
     name = models.CharField(max_length=100)
     date_of_release = models.DateField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    price_usd = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # USD
     image = models.ImageField(upload_to='', blank=True)
     number_in_stock = models.PositiveIntegerField(default=0)
     platform = models.ForeignKey(Platform, on_delete=models.DO_NOTHING)

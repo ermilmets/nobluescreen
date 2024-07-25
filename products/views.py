@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -7,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, FormView, ListView, View
 from products.models import *
 from products.forms import *
+from django.views.decorators.csrf import csrf_exempt
 
 
 class HomePageView(ListView):  # TemplateView
@@ -18,6 +21,7 @@ class HomePageView(ListView):  # TemplateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['platform'] = Platform.objects.all()
+        context['currency'] = self.request.session.get('currency', 'EUR')
         context['genres'] = Genre.objects.all()
         return context
 
@@ -317,6 +321,15 @@ class CheckoutSuccessView(ListView):
 #     template_name = 'cart_detail.html'
 #     context_object_name = 'products'
 
+@csrf_exempt
+def change_currency(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        currency = data.get('currency')
+        if currency in ['EUR', 'USD']:
+            request.session['currency'] = currency
+            return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failure'})
 
 class CreateFeedbackView(CreateView, LoginRequiredMixin):
     model = ProductRating
