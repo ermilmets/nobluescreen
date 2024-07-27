@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% load static %}
+    {% load static %}
 
-<h1>Checkout successful!</h1>
-<h2>Return to <a href="{% url 'home' %}">homepage</a></h2>
+    <h1 style="text-align: center; padding-top: 100px;">Checkout successful!</h1>
+    <div style="text-align: center;">
+        <div style="font-size: 20px;">Thank you for buying, {{ user.username }}!</div>
+        <div style="padding-top: 100px;">
+            <a href="{% url 'home' %} " class="btn btn-primary">Return To Homepage</a>
+        </div>
+    </div>
 
 
 {% endblock %}

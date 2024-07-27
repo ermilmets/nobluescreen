@@ -1,24 +1,46 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, FormView, ListView, View
+from django.views.generic import (
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    FormView,
+    ListView,
+    View,
+)
 from products.models import *
 from products.forms import *
 
 
-class HomePageView(ListView):  # TemplateView
+class HomePageView(ListView):
     model = Product
     template_name = 'home.html'
     context_object_name = 'products'
+    paginate_by = 12
     ordering = ['pk']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['platform'] = Platform.objects.all()
+        context['platforms'] = Platform.objects.filter(slug=self.kwargs.get('platform', ''))
         context['genres'] = Genre.objects.all()
+        item_total = 0
+        if self.request.user.is_authenticated:
+            user_cart, created = Cart.objects.get_or_create(user=self.request.user)
+            user_cart_items = CartItem.objects.filter(cart=user_cart)
+            for cart_item in user_cart_items:
+                item_total += cart_item.quantity
+        else:
+            cart = self.request.session.get('cart', {})
+            for item, quantity in cart.items():
+                item_total += quantity
+        context['item_total'] = item_total
         return context
 
 
@@ -34,17 +56,29 @@ class ProductDetailView(DetailView, FormView):
         context['platform'] = Platform.objects.all()
         context['average_rating'] = product.average_rating()
         context['product_ratings'] = ProductRating.objects.all()
-        # context['platform'] = Platform.objects.all()
+        context['platforms'] = Platform.objects.filter(name=product.platform.name)
+        context['has_ordered'] = False
         if self.request.user.is_authenticated:
             try:
                 context['user_rating'] = ProductRating.objects.get(product=product, user=self.request.user)
             except ProductRating.DoesNotExist:
                 context['user_rating'] = None
+        item_total = 0
+        if self.request.user.is_authenticated:
+            user_cart, created = Cart.objects.get_or_create(user=self.request.user)
+            user_cart_items = CartItem.objects.filter(cart=user_cart)
+            for cart_item in user_cart_items:
+                item_total += cart_item.quantity
+        else:
+            cart = self.request.session.get('cart', {})
+            for item, quantity in cart.items():
+                item_total += quantity
+        context['item_total'] = item_total
         return context
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('login')  # reverse_lazy('login')
+            return redirect('login')
         user_feedback = self.get_object()
         form = self.get_form()
         if form.is_valid():
@@ -58,10 +92,15 @@ class ProductDetailView(DetailView, FormView):
 
     def form_valid(self, form):
         # form.save()
-        return redirect('product_detail', pk=self.get_object().id)  # product_id=self.get_object().id
+        return redirect('product_detail', pk=self.get_object().id)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Error, when leaving a feedback, '
+                                     'please fill out both commentfield and ratingfield!')
+        return redirect('product_detail', pk=self.get_object().id)
 
 
-class GamePlatformView(ListView):  # based on chosen category, shows games only on chosen platform
+class GamePlatformView(ListView):
     model = Product
     template_name = 'game_platform.html'
     context_object_name = 'products'
@@ -74,15 +113,25 @@ class GamePlatformView(ListView):  # based on chosen category, shows games only 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['platform'] = Platform.objects.all()
-        context['selected_platform'] = self.kwargs.get('platform')  # self.platform  context['platform']
+        context['selected_platform'] = self.kwargs.get('platform')
         context['platforms'] = Platform.objects.filter(slug=self.kwargs.get('platform'))
         context['product_ratings'] = ProductRating.objects.all()
+        item_total = 0
+        if self.request.user.is_authenticated:
+            user_cart, created = Cart.objects.get_or_create(user=self.request.user)
+            user_cart_items = CartItem.objects.filter(cart=user_cart)
+            for cart_item in user_cart_items:
+                item_total += cart_item.quantity
+        else:
+            cart = self.request.session.get('cart', {})
+            for item, quantity in cart.items():
+                item_total += quantity
+        context['item_total'] = item_total
 
         return context
 
 
 class AddToCartView(View):
-    # @method_decorator(login_required)  # 'next'  (redirect_field_name='cart_detail')
     def post(self, request, product_id):
         quantity = int(request.POST.get('quantity', 1))
         if request.user.is_authenticated:
@@ -95,71 +144,54 @@ class AddToCartView(View):
                     cart_item.delete()
                 else:
                     cart_item.save()
-        # del request.session['cart']
         product_id = str(product_id)
         cart = request.session.get('cart', {})
         if cart.get(product_id):
-            cart[product_id] += quantity  # 1
+            cart[product_id] += quantity
         else:
-            cart[product_id] = quantity  # 1
+            cart[product_id] = quantity
         request.session['cart'] = cart
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'message': 'Item added to cart'}, status=200)
-        return redirect('cart_detail')  # (, pk=cart_item.pk)
+        return redirect('cart_detail')
 
 
 class RemoveFromCartView(View):
-    # @method_decorator(login_required)
-    def post(self, request, product_id):  # or post
+    def post(self, request, product_id):
+        quantity = int(request.POST.get('quantity', 1))
+        cart = request.session.get('cart', {})
         if request.user.is_authenticated:
             product = get_object_or_404(Product, pk=product_id)
-            # user_cart, created = Cart.objects.get_or_create(user=request.user)
             user_cart = get_object_or_404(Cart, user=request.user)
-            # user_cart.delete()
-            cart_item, created = CartItem.objects.get_or_create(cart=user_cart, product=product)  # for safety, needed
-            # cart_item= get_object_or_404(CartItem, cart=user_cart, product=product)
-            if cart_item.quantity == 1:
+            cart_item, created = CartItem.objects.get_or_create(cart=user_cart, product=product)
+            cart_item.quantity -= quantity
+            if cart_item.quantity <= 0:
                 cart_item.delete()
+                if not user_cart:
+                    del cart
             else:
-                cart_item.quantity -= 1
                 cart_item.save()
-        # product = get_object_or_404(Product, pk=product_id)
         product_id = str(product_id)
         cart = request.session.get('cart', {})
         if cart.get(product_id):
-            if cart.get(product_id) == 1:
+            cart[product_id] -= quantity
+            if cart[product_id] <= 0:
                 del cart[product_id]
-            else:
-                cart[product_id] -= 1
         request.session['cart'] = cart
         return redirect('cart_detail')
 
 
-class CartDetailView(DetailView):  # LoginRequiredMixin,
-    # model = Product
+class CartDetailView(DetailView):
     template_name = 'cart_detail.html'
 
-    # ordering = ['pk']
-    # context_object_name = 'products'
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['platform'] = Platform.objects.all()
-    #     return context
-
-    # @method_decorator(login_required)  # (redirect_field_name='cart_detail')
     def get(self, request, *args, **kwargs):
-        # cart, created = Cart.objects.get_or_create(user=request.user)
-        # product = get_object_or_404(Product, pk=kwargs.get('pk'))
         if request.user.is_authenticated:
-            # user_cart, created = Cart.objects.get_or_create(user=request.user)
-            user_cart = get_object_or_404(Cart, user=request.user)
+            user_cart, created = Cart.objects.get_or_create(user=request.user)
             user_cart_items = CartItem.objects.filter(cart=user_cart)
             total = 0
             item_total = 0
             cart_items = []
             cart = request.session.get('cart', {})
-            # total = sum(item.product.price * item.quantity for item in cart_items)
             if user_cart_items:
                 for cart_item in user_cart_items:
                     cart = {cart_item.product_id: cart_item.quantity}
@@ -181,7 +213,7 @@ class CartDetailView(DetailView):  # LoginRequiredMixin,
                         'quantity': quantity,
                         'total_price': product.price * quantity,
                     })
-            # request.session['cart'] = cart
+            cart_items.sort(key=lambda x: x['quantity'], reverse=True)
         else:
             cart = request.session.get('cart', {})
             total = 0
@@ -196,10 +228,9 @@ class CartDetailView(DetailView):  # LoginRequiredMixin,
                     'quantity': quantity,
                     'total_price': product.price * quantity,
                 })
+            cart_items.sort(key=lambda x: x['quantity'], reverse=True)
         return render(request, self.template_name, {'cart_items': cart_items, 'total': total,
                                                     'item_total': item_total, 'platform': Platform.objects.all()})
-        # return render(request, self.template_name, {'cart': cart,
-        #                                             'cart_total': cart_total, 'item_total': item_total})
 
     def post(self, request):
         cart = request.session.get('cart', {})
@@ -238,8 +269,7 @@ class CheckoutView(View):
                     'quantity': cart_item.quantity,
                     'total_price': cart_item.product.price * cart_item.quantity,
                 })
-            # request.session['cart'] = cart
-        else:  # in case user cart is empty, overwrite with session cart
+        else:
             for product_id, quantity in cart.items():
                 product = get_object_or_404(Product, pk=product_id)
                 total += product.price * quantity
@@ -249,20 +279,16 @@ class CheckoutView(View):
                     'quantity': quantity,
                     'total_price': product.price*quantity,
                 })
-        # request.session['cart'] = cart
         form = CheckoutForm(request.POST or None)
         return render(request, self.template_name, {'form': form, 'cart_items': cart_items,
                                                     'total': total, 'item_total': item_total,
                                                     'platform': Platform.objects.all()})
-        # return render(request, self.template_name, {'form': form,
-        #                                             'cart': cart, 'cart_total': cart_total, 'item_total': item_total})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         form = CheckoutForm(request.POST or None)
         if form.is_valid():
             cart = request.session.get('cart', {})
-            # cart = get_object_or_404(Cart, user=request.user)
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
@@ -272,28 +298,92 @@ class CheckoutView(View):
             order = Order.objects.create(user=request.user, first_name=first_name,
                                          last_name=last_name, email=email,
                                          phone=phone, address=address, city=city, order_complete=True)
-            # dummy order processing
             if cart:
-                # user_cart = Cart.objects.get(user=request.user)  # get_or_create  user_cart, created
                 user_cart = get_object_or_404(Cart, user=request.user)
-                # user_cart_items = CartItem.objects.filter(cart=user_cart)
-                # user_cart.cartitem_set.all().delete()
                 for product_id, quantity in cart.items():
                     product = get_object_or_404(Product, pk=product_id)
                     OrderItem.objects.create(user=request.user, order=order,
                                              product=product, quantity=quantity)
-                    # CartItem.objects.create(cart=user_cart, product=product, quantity=quantity)
-                # for item in user_cart.cartitem_set.all():
-                    # CartItem.objects.create(cart=user_cart, product=item.product, quantity=item.quantity)
-                # for item in user_cart.cartitem_set.all():    # user_cart.cartitem_set.all():
-                #     OrderItem.objects.create(user=request.user, order=order,
-                #                              product=item.product, quantity=item.quantity)
                 del request.session['cart']
-                # user_cart.items.clear()
-                user_cart.cartitem_set.all().delete()  # clearing the user_cart
-                # user_cart.products.clear()
+                user_cart.cartitem_set.all().delete()
             return redirect('checkout_success')
         return render(request, self.template_name, {'form': form})
+
+
+class AboutUsView(ListView):
+    model = Product
+    template_name = 'aboutus.html'
+    context_object_name = 'products'
+    # ordering = ['pk']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['platform'] = Platform.objects.all()
+        context['platforms'] = Platform.objects.filter(slug=self.kwargs.get('platform', ''))
+        context['genres'] = Genre.objects.all()
+        item_total = 0
+        if self.request.user.is_authenticated:
+            user_cart, created = Cart.objects.get_or_create(user=self.request.user)
+            user_cart_items = CartItem.objects.filter(cart=user_cart)
+            for cart_item in user_cart_items:
+                item_total += cart_item.quantity
+        else:
+            cart = self.request.session.get('cart', {})
+            for item, quantity in cart.items():
+                item_total += quantity
+        context['item_total'] = item_total
+        return context
+
+
+class ContactUsView(ListView):
+    model = Product
+    template_name = 'contactus.html'
+    context_object_name = 'products'
+    # ordering = ['pk']
+
+    def item_total_method(self, request, *args, **kwargs):
+        item_total = 0
+        if self.request.user.is_authenticated:
+            user_cart, created = Cart.objects.get_or_create(user=self.request.user)
+            user_cart_items = CartItem.objects.filter(cart=user_cart)
+            for cart_item in user_cart_items:
+                item_total += cart_item.quantity
+        else:
+            cart = self.request.session.get('cart', {})
+            for item, quantity in cart.items():
+                item_total += quantity
+        return item_total
+
+    def get(self, request, *args, **kwargs):
+        form = ContactUsForm(request.POST or None)
+        return render(request, self.template_name, {'form': form, 'platform': Platform.objects.all(),
+                                                    'item_total': self.item_total_method(request, *args, **kwargs)})
+
+    def post(self, request, *args, **kwargs):
+        form = ContactUsForm(request.POST or None)
+        if form.is_valid():
+            return redirect('message_sent')
+
+
+class ContactUsSent(ListView):
+    template_name = 'contactus_sent.html'
+
+    def item_total_method(self, request, *args, **kwargs):
+        item_total = 0
+        if self.request.user.is_authenticated:
+            user_cart, created = Cart.objects.get_or_create(user=self.request.user)
+            user_cart_items = CartItem.objects.filter(cart=user_cart)
+            for cart_item in user_cart_items:
+                item_total += cart_item.quantity
+        else:
+            cart = self.request.session.get('cart', {})
+            for item, quantity in cart.items():
+                item_total += quantity
+        return item_total
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'platform': Platform.objects.all(),
+                                                    'item_total': self.item_total_method(request, *args, **kwargs)})
 
 
 class CustomLoginView(ListView):

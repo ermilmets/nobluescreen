@@ -1,93 +1,111 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% load static %}
-<div class="container" style="padding-bottom: 40px;">
-    <div class="card">
-        <h1 style="padding: 20px;">{{ product.name }}</h1>
-        <div style="text-align: center;">
-            {% if product.image %}
-                <a href="{{ product.image.url }}"><img src="{{ product.image.url }}" alt="image of game"></a>
-            {% else %}
-                'Product image placeholder'
-            {% endif %}
-        </div>
-        <div style="padding-left: 20px; padding-bottom: 20px;">
-            <p>{{ product.description }}</p>
-            <p>Platform: <a href="{% url 'gameplatform' product.platform.slug %}">{{ product.platform }}</a></p>
-            <p>Genres:
-                {% for genre in product.genre.all %}
-                    <ul>
-                        <li>{{ genre.name }}</li>
-                    </ul>
-                {% endfor %}
-            <p>Age rating: {{ product.age_rating }}</p>
-            <p>Date of release: {{ product.date_of_release }}</p>
-            <p>Price: {{ product.price }} €</p>
-            Rating:
-            <div class="star-rating-div" data-rating="{{ product.average_rating }}">
-            </div>
-            <div style="padding-top: 40px;">
-                {% if product.ratings.count == 1 %}
-                    ({{ product.ratings.count }} review)
-                {% elif product.ratings.count == 0 %}
-                    (Not rated yet)
-                {% else %}
-                    ({{ product.ratings.count }} reviews)
-                {% endif %}</div>
-            <p>
-            <form method="post" action="{% url 'add_to_cart' product.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
-            </form>
-            {#{% if user_rating %}#}
-            {#        <p>Your Rating:</p>#}
-            {#        <div class="star-rating-div" data-rating="{{ user_rating.star_rating }}">#}
-            {#        </div>#}
-            {#    {% endif %}#}
-            {% if user.is_authenticated %}
-                <h3>Leave a review</h3>
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="star-rating">
-                        {% for i in "12345" %}
-                            <input type="radio" id="star{{ forloop.revcounter }}" name="star_rating"
-                                   value="{{ forloop.revcounter }}"
-                                   {% if user_rating and user_rating.star_rating == forloop.revcounter %}checked{% endif %}>
-                            <label for="star{{ forloop.revcounter }}">★</label>
-                        {% endfor %}
-                    </div>
-                    <textarea name="feedback" placeholder="Leave feedback">{{ user_rating.feedback }}</textarea>
-                    <button type="submit" class="btn btn-info">Submit Rating</button>
-                </form>
-            {% else %}
-                <p><a href="{% url 'login' %}">Log in</a> to rate this product.</p>
-            {% endif %}
-            <br>
-            <h3>{% if product.ratings.count == 0 %}
-                No reviews yet
-            {% elif product.ratings.count == 1 %}
-                Review (1):
-            {% else %}
-                Reviews ({{ product.ratings.count }}):
-            {% endif %}
-            </h3>
-            {% for rating in product_ratings %}
-                <div>
-                    {% if rating.product.name == product.name %}
-                        <h4> Review By: {{ rating.user }}</h4>
-                        <div class="star-rating-div" data-rating="{{ rating.star_rating }}">
-                        </div>
-                        <div style="padding-top: 35px;">{{ rating.star_rating }}/5
-                            <p>Comment: {{ rating.feedback }}
-                            </p></div>
-                    {% endif %}
-                </div>
+    {% load static %}
+    {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
             {% endfor %}
-        <a href="{% url 'home' %}" class="btn btn-success">Homepage</a>
+        </div>
+    {% endif %}
+    <div class="container" style="padding-bottom: 40px;">
+        <div class="card">
+            <h1 style="padding: 20px;">{{ product.name }}</h1>
+            <div style="text-align: left;">
+                <div style="display: inline-block; padding-left: 20px; padding-bottom: 20px;">
+                    <p>{{ product.description }}</p>
+                    <p>Platform: <a href="{% url 'gameplatform' product.platform.slug %}">{{ product.platform }}</a></p>
+                    <p>Genres:
+                        {% for genre in product.genre.all %}
+                            <ul>
+                                <li>{{ genre.name }}</li>
+                            </ul>
+                        {% endfor %}
+                    <p>Age rating: {{ product.age_rating }}</p>
+                    <p>Date of release: {{ product.date_of_release }}</p>
+                    <p>Price: {{ product.price }} €</p>
+                    Rating:
+                    <div class="star-rating-div" data-rating="{{ product.average_rating }}">
+                    </div>
+                    <div style="padding-top: 40px;">
+                        {% if product.ratings.count == 1 %}
+                            ({{ product.ratings.count }} review)
+                        {% elif product.ratings.count == 0 %}
+                            (Not rated yet)
+                        {% else %}
+                            ({{ product.ratings.count }} reviews)
+                        {% endif %}</div>
+                    <p>
+                        {% if product.number_in_stock > 0 %}
+                            <div>in stock</div>
+                            <div>
+                                <form method="post" action="{% url 'add_to_cart' product.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <div>
+                                <div>out of stock</div>
+                                <form method="post" action="{% url 'add_to_cart' product.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary" disabled>Sold Out</button>
+                                </form>
+                            </div>
+                        {% endif %}</div>
+                <div style="display: inline-block; float: right;">
+                    {% if product.image %}
+                        <a href="{{ product.image.url }}"><img style="padding-right: 60px;"
+                                                               src="{{ product.image.url }}" alt="image of game"></a>
+                    {% else %}
+                        'Product image placeholder'
+                    {% endif %}</div>
+            </div>
+            <div style="padding-left: 20px; padding-bottom: 20px;">
+                {% if user.is_authenticated %}
+                    <h3>Leave a review</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="star-rating">
+                            {% for i in "12345" %}
+                                <input type="radio" id="star{{ forloop.revcounter }}" name="star_rating"
+                                       value="{{ forloop.revcounter }}"
+                                       {% if user_rating and user_rating.star_rating == forloop.revcounter %}checked{% endif %}>
+                                <label for="star{{ forloop.revcounter }}">★</label>
+                            {% endfor %}
+                        </div>
+                        <textarea name="feedback" placeholder="Leave feedback">{{ user_rating.feedback }}</textarea>
+                        <button style="margin-bottom: 23px;" type="submit" class="btn btn-info">Submit Rating</button>
+                    </form>
+                {% else %}
+                    <p><a href="{% url 'login' %}">Log in</a> to rate this product.</p>
+                {% endif %}
+                <br>
+                <h3>{% if product.ratings.count == 0 %}
+                    No reviews yet
+                {% elif product.ratings.count == 1 %}
+                    Review (1):
+                {% else %}
+                    Reviews ({{ product.ratings.count }}):
+                {% endif %}
+                </h3>
+                {% for rating in product_ratings %}
+                    <div>
+                        {% if rating.product.name == product.name %}
+                            <h4> Review By: {{ rating.user }}</h4>
+                            <div class="star-rating-div" data-rating="{{ rating.star_rating }}">
+                            </div>
+                            <div style="padding-top: 35px;">{{ rating.star_rating }}/5
+                                <p>Comment: {{ rating.feedback }}
+                                </p></div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <a href="{% url 'home' %}" class="btn btn-success">Homepage</a>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 

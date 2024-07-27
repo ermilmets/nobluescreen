@@ -1,5 +1,5 @@
 :root {
-    --rating-percentage: 0; /* Default value */
+    --rating-percentage: 0;
 }
 
 html {
@@ -11,7 +11,6 @@ body {
         /*font-family: "Times New Roman", sans-serif;*/
         margin: 0;
         padding: 0;
-        /*text-align: center;*/
         min-height: 100vh; /*ensures footer*/
         display: flex;
         flex-direction: column;
@@ -30,11 +29,8 @@ header h3 {
 
 nav {
         background-color: black;
-        /*border-radius: 60px;
-        /*font-size: 20px; */
         margin-left: 10%;
         margin-right: 10%;
-        /*text-decoration: none;*/
         overflow: hidden;
         text-align: center;
 }
@@ -53,13 +49,10 @@ nav a:hover {
     background-color: black;
     /*color: #0b9e8d;*/
     color: #368cbc;
-    /*padding: 10px;
-    font-size: 25px;*/
     display: inline-block;
     overflow: hidden;
     transform: scale(1.2) translate(0px, -1.5px);
-    /*border-radius: 40px;*/
-    /* #485282  previous bg color*/
+    text-decoration: none;
 }
 
 nav a.split {
@@ -88,7 +81,7 @@ nav .search-container {
     font-size: 14px;
 }
 
-nav button {    /*.search-container*/
+nav button {
     font-size: 25px;
     border: none;
     background: black;
@@ -107,9 +100,9 @@ nav .search-container button:hover {
 }
 
 .mydropdown {
-  float: left;
-  overflow: hidden;
-  display: inline-block;
+    float: left;
+    /*overflow: hidden;*/
+    display: inline-block;
 }
 
 .mydropdown .mydropdown-content {
@@ -119,7 +112,6 @@ nav .search-container button:hover {
   min-width: 171px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
-    /*right: 78px;  !*for the exact position*!*/
 }
 .mydropdown .mydropdown-content2 {
   display: none;
@@ -151,7 +143,6 @@ nav .search-container button:hover {
 
 
 #dropdown-lang {
-    /*right: 0;*/
     transform: translate(0);
     min-width: 60px;
 }
@@ -167,7 +158,6 @@ nav .search-container button:hover {
 
 .mydropdown:hover .mydropdown-content2 {
     display: block;
-    /*transform: translate(0, 0px);*/
 }
 
 .mydropdown:hover button {
@@ -177,9 +167,6 @@ nav .search-container button:hover {
 }
 
 .games-icon {
-    display: none;
-    /*transition: transform 1s;*/
-    /*transition-delay: 1s;*/
     color: #368cbc;
     position: absolute;
     margin-left: -30px;
@@ -190,24 +177,25 @@ nav .search-container button:hover {
 
 .mydropdown:hover .games-icon {
     display: inline-block;
-    animation: myfirst 0.5s;
-    animation-fill-mode: forwards;
-    /*animation-delay: 0.1s;*/
-    /*animation-timing-function: ease-out;*/
-    /*transition: transform 1s;*/
-    /*transition-delay: 1s;*/
 }
 
 @keyframes myfirst {
-    /*0% {left: 0;}*/
-    /*25% {left: 20px; }*/
-    /*50% {left: 40px; }*/
-    /*75% {left: 60px; }*/
-    /*100% {left: 80px; }*/
     from {opacity: 0;}
     to {opacity: 100%;}
 
 }
+
+.games-icon-2 {
+    display: inline-block;
+    /*transition: transform 1s;*/
+    /*transition-delay: 1s;*/
+    color: #368cbc;
+    position: absolute;
+    margin-left: -30px;
+    margin-top: 7px;
+    font-size: 27px;
+    pointer-events: none;
+}  /* not working in Django*/
 
 nav .search-container .mydropdown .button-lang {
     font-size: 18px;
@@ -229,19 +217,14 @@ nav .search-container .mydropdown .button-lang {
 
 .search-container-top {
     text-align: center;
-    /*float: none;*/
-    /*align-items: center;*/
-    /*margin: auto;*/
     max-width: 450px;
     margin-right: 8%;
     /*margin-left: 50%;*/
     margin-top: 50px;
     right: 0;
-    /*box-sizing: border-box;*/
     overflow: hidden;
     border: none;
     display: inline-block;
-    /*display: flex;  !* without it leaves a space *!*/
 }
 
 .search-container-top table {
@@ -264,7 +247,6 @@ nav .search-container .mydropdown .button-lang {
     outline-style: none;
     box-shadow: none;
     text-indent: 7px;
-    /*display: inline-block;*/
 }
 
 .search-container-top button {
@@ -273,29 +255,16 @@ nav .search-container .mydropdown .button-lang {
     color: white;
     font-size: 16px;
     padding: 12px;
-    /*margin-top: 30px;*/
-    margin-top: 0px;
-    border-radius: 0px 30px 30px 0px;
-    /*width: 6%;*/
+    margin-top: 0;
+    border-radius: 0 30px 30px 0;
     cursor: pointer;
     border: none;
     transition: all 0.2s ease;
     display: inline-block;
-    /*float: left;
-    width: 20%;
-    padding: 10px;
-    background: #2196F3;
-    color: white;
-    font-size: 17px;
-    border: none;
-    cursor: pointer;*/
 }
 
 .search-container-top button:hover {
     color: #368cbc;
-    /*background-color: #0b9e8d;*/
-    /*display: inline-block;*/
-    /*overflow: none;*/
 }
 
 * {
@@ -317,21 +286,14 @@ nav .search-container .mydropdown .button-lang {
 }
 
 .button-main-icon {
-    /*background-color: #368cbc;*/
     background-color: black;
-    /*font-size: 20px;*/
-    /*border: none;*/
-    /*background: #368cbc;*/
-    /*color: white;*/
-    /*cursor: pointer;*/
     transition: all 0.3s ease;
-    /*outline: none;*/
     transform: rotate(-90deg) translate(0px, -35px);
     margin: 0;
+    padding: 0;
     height: 60px;
     width: 130px;
 }
-
 
 .clear-float {
     clear: both;
@@ -357,7 +319,6 @@ table {
 
 table, th, td {
   border: none;
-  /*border: solid;*/
   border-collapse: collapse;
   text-align: center;
   /*min-width: 400px;*/
@@ -386,16 +347,6 @@ th {
     color: brown;
     /*scroll-behavior: smooth;*/
 }
-/*
-ul {
-    background-color: gold;
-    padding: 10px;
-    display: block;
-    list-style-type: none;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-}*/
-
 
 .animal-heading {
     color: #80142c;
@@ -542,9 +493,6 @@ ul {
     bottom: 0;
     text-align: center;
     margin-top: auto;
-    /*margin-left: -6.8%;
-    margin-right: -6.8%;
-    margin-bottom: -7%; causes problems*/
     color: white;
 }
 
@@ -576,9 +524,9 @@ ul {
     font-size: 18px;
     color: white;
     border: none;
-    box-sizing: border-box; /* makes sure width and stays in place */
+    box-sizing: border-box;
     min-width: 600px;
-    outline-style: none;  /* removed the border when highlighted */
+    outline-style: none;
     box-shadow: none;
     padding: 10px;
     resize: none;
@@ -590,16 +538,13 @@ ul {
     height: 200px;
 }
 .contact-form label {
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
-    /*transform: translate(100px, 0px);*/
-    margin-right: 18%;
     margin: auto;
 }
 
 .contact-form input[type=submit]:hover {
-    color: black;
-    background-color: #0b9e8d;
+    background-color: #368cbc;
 
 }
 
@@ -607,7 +552,6 @@ ul {
     min-width: 5%;
     font-size: 20px;
     background-color: black;
-    font-size: 18px;
     color: white;
     border: none;
     transition: all 0.2s ease;
@@ -622,8 +566,6 @@ ul {
     margin: auto;
     margin-left: 22%;
     margin-right: 22%;
-    /*border: solid;*/
-    /*background-color: white;*/
 }
 
 .slide-container .home-slides img {
@@ -652,14 +594,11 @@ ul {
 
 .number-text {
     position: absolute;
-    /*background-color: black;*/
     text-align: right;
     right: 15px;
     top: 10px;
     font-size: 20px;
     text-shadow: -5px 5px 10px black;
-    /*-webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: black;*/
     font-family: Verdana;
     color: white;
 }
@@ -675,30 +614,29 @@ ul {
     /*padding: 16px;*/
     font-size: 30px;
     margin-top: -10px;
-    user-select: none; /* what the hell is this???*/
+    user-select: none;
 }
 
 .next-one {
     right: 0;
-    border-radius: 10px 0px 0px 10px;
+    border-radius: 10px 0 0 10px;
 
 }
 
 .previous {
     left: 0;
-    border-radius: 0px 10px 10px 0px;
+    border-radius: 0 10px 10px 0;
 }
 
 
 .previous:hover, .next-one:hover {
-    /*transform: scale(1.1);*/
     background-color: black;
     color: #0b9e8d;
     opacity: 0.6;
 }
 
 .animation {
-    animation-name: example; /*refers to the keyframes property that must be created*/
+    animation-name: example;
     animation-duration: 2s;
 }
 
@@ -716,7 +654,6 @@ ul {
 
 .div-logo-area {
     background-color: #368cbc;
-    /*margin-top: 0;*/
     padding-top: 20px;
 }
 
@@ -727,52 +664,57 @@ ul {
 
 
 .cart-icon {
-    display: inline-flex;           /* Makes the anchor element flexible */
-    align-items: center;            /* Centers the icon vertically */
-    justify-content: center;        /* Centers the icon horizontally */
-    width: 50px;                    /* Width of the clickable area */
-    height: 50px;                   /* Height of the clickable area */
-    border-radius: 50%;             /* Makes the area a circle */
-    background-color: white;      /* Background color of the circle */
-    text-decoration: none;          /* Removes underline from the link */
-    color: #368cbc;                    /* Color of the icon */
-    border: none;         /* Optional: adds a border to the circle */
-    transition: background-color 0.3s, transform 0.3s; /* Smooth hover effect */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    text-decoration: none;
+    color: #368cbc;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
     text-align: right;
     margin-top: 50px;
     margin-right: 13%;
     position: relative;
     float: right;
     font-size: 30px;
+}
 
+.cart-icon-items {
+    position: absolute;
+    color: white;
+    font-size: 13px;
+    background-color: red;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    top: -5px;
+    right: -5px;
 
 }
 
 
 .cart-icon:hover {
     background-color: #368cbc;
-    transform: scale(1.0);
+    text-decoration: none;
     color: black;
 }
 
 
 .cart-icon .fa {
-    font-size: 30px;                /* Size of the shopping cart icon */
+    font-size: 30px;
     transition: all 0.4s ease;
 }
-
-/*.cart-icon .fa:hover {*/
-/*    transform: scale(1.2);*/
-/*}*/
-
 
 
 /*--------------------------------------------*/
 
-
-
-
-/*------------------------------------------------*/
 .star-rating {
     direction: rtl;
     display: inline-block;
@@ -801,37 +743,26 @@ ul {
 }
 /*--------------------------------*/
 .star-rating-div {
-    /*clear: both;*/
-    /*unicode-bidi: bidi-override;*/
-    /*float: right;*/
-    /*direction: initial;*/
     font-size: 1.8em;
     position: relative;
     color: #ccc;
     width: 4.165em;
-    /*width: 4.15em; !* 5 stars, 1em each *!*/
-    /*height: 1em;*/
-    /*width: 133px;*/
-    /*border: solid 1px red;*/
     display: inline-block;
-    /*text-align: center;*/
 }
 
 .star-rating-div::before {
     content: "★★★★★";
-    color: #ccc; /* Grey color for background stars */
+    color: #ccc;
     z-index: 1;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    /*display: block;*/
-    /*width: min-content;*/
 }
 
 .star-rating-div::after {
     content: "★★★★★";
-    color: #f5b301; /* Gold color for filled stars */
+    color: #f5b301;
     z-index: 2;
     position: absolute;
     /*width: 0;*/
@@ -841,8 +772,6 @@ ul {
     overflow: hidden;
     white-space: nowrap;
 
-    /*display: block;*/
-    /*border: solid 1px red;*/
 }
 
 
@@ -869,7 +798,68 @@ ul {
 }
 
 
+.quantity-input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+}
+.quantity-wrapper {
+    display: flex;
+    align-items: center;
+}
+.quantity-button {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.quantity-button:hover {
+    background-color: #e2e6ea;
+}
+.quantity-button:active {
+    background-color: #dae0e5;
+}
 
+.carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: black;
+        opacity: 0.4;
+    }
 
+.carousel-control-prev-icon:hover,
+    .carousel-control-next-icon:hover {
+        background-color: black;
+        opacity: 0.9;
+    }
 
+.carousel-indicators li {
+        background-color: gray;
+        border: none;
+}
+
+.carousel-indicators li.active {
+    background-color: black;
+}
+
+.carousel-indicators li:hover {
+    background-color: black;
+}
+
+.alert-container {
+    margin-top: 30px;
+    margin-right: 200px;
+    margin-left: 200px;
+    }
+
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
 

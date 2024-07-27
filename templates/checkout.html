@@ -13,7 +13,7 @@
             <div style="min-width: 40%;">
                 <img src="{{ item.product.image.url }}" height="22px" width="25px" alt="img">
                 {{ item.product.name }} - {{ item.quantity }} x €{{ item.product.price }} </div>
-            <span style="color: black; font-size: 14px;" class="badge badge-primary">Item Total: €{{ item.total_price }}</span>
+            <span style="color: black; font-size: 14px;" class="badge">Item Total: €{{ item.total_price }}</span>
             {#                    <form method="post" action="{% url 'remove_from_cart' item.product.id %}" style="display:inline;">#}
             {#                        {% csrf_token %}#}
             {#                        <button type="submit" class="btn btn-danger btn-sm ml-3">Remove</button>#}

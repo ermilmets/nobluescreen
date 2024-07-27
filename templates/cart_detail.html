@@ -1,122 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% load multiply %}
-{% load static %}
-<div class="container mt-5" style="max-width: 50%;">
-    <h1 class="mb-4">Shopping Cart
-        {% if item_total == 1 %}
-            ({{ item_total }} item)
+    {% load multiply %}
+    {% load static %}
+    <div class="container mt-5" style="max-width: 55%;">
+        <h1 class="mb-4">Shopping Cart
+            {% if item_total == 1 %}
+                ({{ item_total }} item)
             {% elif item_total > 1 %}
-            ({{ item_total }} items)
-        {% endif %}</h1>
-    {% if cart_items %}   {# if cart.cartitem_set.all #}
-        <ul class="list-group mb-4">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div style="min-width: 49%; padding-left: 10px;">Item</div>
-                {#            <div>Quantity</div>#}
-                {#            <div>Price</div>#}
-                <div>Remove</div>
-                <div>Total</div>
-            </li>
-            {% for item in cart_items %}  {# cart.cartitem_set.all #}
+                ({{ item_total }} items)
+            {% endif %}</h1>
+        {% if cart_items %} 
+            <ul class="list-group mb-4">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div style="width: 60%;">
-                        <img src="{{ item.product.image.url }}" height="45px" width="50px" alt="img">
-                        {{ item.product.name }} ({{ item.product.platform }}) - {{ item.quantity }} x
-                        € {{ item.product.price }}</div>
-                    <div style="padding-top: 10px;">
-                        <form method="post" action="{% url 'remove_from_cart' item.product.id %}" style="display:flex;">
-                            {% csrf_token %}
-                            <button type="submit" style="background-color: white; border: none; color: red; font-size: 20px;"><i
-                                    class="fa fa-trash"></i></button>
-                            {#                        class="btn btn-danger btn-sm ml-3"#}
-                        </form>
-                    </div>
-                    <span style="font-size: 15px; width: 15%; text-align: right;">
-{#                        class="badge badge-primary badge-pill"#}
-                        € {{ item.total_price }} </span> {# item.quantity|multiply:item.product.price #}
+                    <div style="min-width: 49%; padding-left: 10px;">Item</div>
+                    <div>Add/Remove</div>
+                    <div>Total</div>
                 </li>
-            {% endfor %}
-        </ul>
-        <h3 style="text-align: right;">Order Total: {{ total }} €</h3>  {# cart_total #}
-        <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
-        <a style="margin-left: 10px;" href="{% url 'home' %}" class="btn btn-outline-secondary">Continue Shopping</a>
-    {% else %}
-        <p>Your cart is empty.</p>
-        <a href="{% url 'home' %}" class="btn btn-success">Back To Shopping</a>
-    {% endif %}
-    {#    <p style="text-align: center;">Return to <a href="{% url 'home' %}">homepage</a></p>#}
-</div>
+                {% for item in cart_items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div style="width: 60%;">
+                            <img src="{{ item.product.image.url }}" height="45px" width="50px" alt="img">
+                            {{ item.product.name }} ({{ item.product.platform }}) - {{ item.quantity }} x
+                            € {{ item.product.price }}</div>
+                        <div style="display: flex; font-size: 20px;">
+                            <form method="post" action="{% url 'add_to_cart' item.product.id %}" style="display:inline-block; padding-right: 20px;">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        style="background-color: white; border: none; color: red;"><i
+                                        class="fa fa-plus-square" style="color: limegreen"></i>
+                                </button>
+                            </form>
+                            <form method="post" action="{% url 'remove_from_cart' item.product.id %}"
+                                  style="display:inline-block;">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        style="background-color: white; border: none; color: red;"><i
+                                        class="fa fa-minus-square"></i></button>
+                            </form>
+                        </div>
+                        <span style="font-size: 15px; width: 15%; text-align: right;">
+                        € {{ item.total_price }} </span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <h3 style="text-align: right;">Order Total: {{ total }} €</h3>  {# cart_total #}
+            <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
+            <a style="margin-left: 10px;" href="{% url 'home' %}" class="btn btn-outline-secondary">Continue
+                Shopping</a>
+        {% else %}
+            <p>Your cart is empty.</p>
+            <a href="{% url 'home' %}" class="btn btn-success">Back To Shopping</a>
+        {% endif %}
+        {#    <p style="text-align: center;">Return to <a href="{% url 'home' %}">homepage</a></p>#}
+    </div>
 {% endblock %}
-
-
-{#<body>#}
-{#<div class="container mt-5">#}
-{#    <h1 class="mb-4">Shopping Cart</h1>#}
-{#    {% if cart_items %}#}
-{#    <ul class="list-group mb-4">#}
-{#        {% for item in cart_items %}#}
-{#        <li class="list-group-item d-flex justify-content-between align-items-center">#}
-{#            {{ item.product.name }} - {{ item.quantity }} x ${{ item.product.price }}#}
-{#            <div>#}
-{#                <span class="badge badge-primary badge-pill">${{ item.quantity|multiply:item.product.price }}</span>#}
-{#                <form method="post" action="{% url 'remove_from_cart' item.product.id %}" style="display:inline;">#}
-{#                    {% csrf_token %}#}
-{#                    <button type="submit" class="btn btn-danger btn-sm ml-3">Remove</button>#}
-{#                </form>#}
-{#            </div>#}
-{#        </li>#}
-{#        {% endfor %}#}
-{#    </ul>#}
-{#    <h3>Total: ${{ total }}</h3>#}
-{#    <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>#}
-{#    {% else %}#}
-{#    <p>Your cart is empty.</p>#}
-{#    {% endif %}#}
-{#</div>#}
-{#</body>#}
-
-
-
-{#{% load multiply %}#}
-{#<!DOCTYPE html>#}
-{#<html>#}
-{#<head>#}
-{#    <title>Cart</title>#}
-{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">#}
-{#</head>#}
-{#<body>#}
-{#<div class="container mt-5">#}
-{#    <h1 class="mb-4">Shopping Cart</h1>#}
-{#    {% if cart_items %}#}
-{#    <ul class="list-group mb-4">#}
-{#        {% for item in cart_items %}#}
-{#        <li class="list-group-item d-flex justify-content-between align-items-center">#}
-{#            {{ item.product.name }} - ${{ item.product.price }} each#}
-{#            <div class="d-flex">#}
-{#                <form method="post" action="{% url 'cart_detail' %}" class="form-inline">#}
-{#                    {% csrf_token %}#}
-{#                    <div class="form-group mx-sm-3 mb-2">#}
-{#                        <input type="number" class="form-control" name="quantity" value="{{ item.quantity }}" min="1">#}
-{#                        <input type="hidden" name="product_id" value="{{ item.product.id }}">#}
-{#                    </div>#}
-{#                    <button type="submit" class="btn btn-primary mb-2">Update</button>#}
-{#                </form>#}
-{#                <form method="post" action="{% url 'remove_from_cart' item.product.id %}" style="display:inline;">#}
-{#                    {% csrf_token %}#}
-{#                    <button type="submit" class="btn btn-danger btn-sm ml-3">Remove</button>#}
-{#                </form>#}
-{#            </div>#}
-{#            <span class="badge badge-primary badge-pill">${{ item.total_price }}</span>#}
-{#        </li>#}
-{#        {% endfor %}#}
-{#    </ul>#}
-{#    <h3>Total: ${{ total }}</h3>#}
-{#    <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>#}
-{#    {% else %}#}
-{#    <p>Your cart is empty.</p>#}
-{#    {% endif %}#}
-{#</div>#}
-{#</body>#}
-{#</html>#}

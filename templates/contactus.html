@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    {% load static %}
+    <div style="margin: 2% 25% 2% 25%;">
+    <div style="text-align: center; padding-top: 20px;">
+        <p style="font-size: 40px;">Contact Us</p>
+        <div class="contact-form">
+            <form method="post">
+                {% csrf_token %}
+                <div>
+                    <label for="first_name">First Name</label><br>
+                    {{ form.first_name }}
+                </div>
+                <div>
+                    <label for="last_name">Last Name</label><br>
+                    {{ form.last_name }}
+                </div>
+                <div>
+                    <label for="email">E-mail</label><br>
+                    {{ form.email }}
+                </div>
+                <br>
+                <label for="message">Your Message: </label><br>
+                {{ form.message }}
+                <br>
+                <br>
+                <div>
+                    <input type="submit" value="Submit" class="contact-form-submit">
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock %}
