@@ -2,7 +2,7 @@
 
 {% block content %}
 {% load static %}
-
+    <div style="margin-top: 20px;">
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -18,9 +18,10 @@
                     </form>
                 </div>
             </div>
+            <div style="padding-top: 10px; text-align: right;">Already have an account? Login <a href="{% url 'login' %}">here</a> instead!</div>
         </div>
     </div>
 </div>
-
+</div>
 
 {% endblock %}
