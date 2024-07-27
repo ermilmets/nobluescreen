@@ -26,8 +26,6 @@ The project has an active admin panel which is accessible via admin/. All CRUD o
 <li>Clone the repository in the desired folder and create a virtual environment for it. At the moment of its creation, NoBlueScreen runs with Python 3.12;<br>
 <code>python3 -m venv venv</code><br>
 <code>source venv/bin/activate</code></li>
-python -m venv venv<br>
-.\venv\Script\activate
 <li>Install the requirements<br>
 <code>pip install -r requirements.txt</code></li>
 <li>Create a file named .env, where to store all the relevant information about the environment, namely:<br>
