@@ -38,8 +38,16 @@ The project has an active admin panel which is accessible via admin/. All CRUD o
 </ul>
 </li>
 <li>
-
 Install postgres database and properly set it on the machine.
+</li>
+<li>
+Run migrations<br>
+<code>python manage.py makemigrations</code><br>
+<code>python manage.py migrate</code>
+</li>
+<li>
+Run the server and access the page at the path indicated in the terminal<br>
+<code>python manage.py runserver</code><br>
 </li>
 </ol>
 <h4>Local installation (Windows)</h4>
