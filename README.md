@@ -56,6 +56,3 @@ Run the server and access the page at the path indicated in the terminal<br>
 <code>python -m venv venv</code><br>
 <code>.\venv\Script\activate</code></li>
 </ol>
-
-<h3>Testing</h3>
-Launch the tests with <code>pytest tests</code>
