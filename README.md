@@ -1,12 +1,10 @@
 # NoBlueScreen
 
-NoBlueScreen is a Django-based project, consisting on an e-commerce webpage focused in selling videogames of every
+NoBlueScreen is a Django-based project, consisting on an e-commerce webpage focused on selling videogames of every
 period and console.<br>
 
-<br>
-![NoBlueScreen Home](/nobluescreen/static/images/nobluescreen_home.png) 
+![nobluescreen_main.jpg](nobluescreen_main.jpg)
 
-<br><br>
 
 The website is featured by an essential but practical weather widget, and it allows the user to:
  <ul>
