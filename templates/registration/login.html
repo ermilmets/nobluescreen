@@ -10,7 +10,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 300px;
-    text-align: center;
+    text-align: left;
     margin-left: auto;
     margin-right: auto;
 
@@ -69,17 +69,18 @@
 
 <div style="padding-top: 50px;">
 <div class="login-container">
-        <h1>Login to account</h1>
+        <h1 style="text-align: center;">Login to account</h1>
         <form method="POST">
             {% csrf_token %}
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required placeholder="Enter Username">
-            </div>
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="Enter Password">
-            </div>
+            {{ form.as_p }}
+{#            <div class="input-group">#}
+{#                <label for="username">Username</label>#}
+{#                <input type="text" id="username" name="username" required placeholder="Enter Username">#}
+{#            </div>#}
+{#            <div class="input-group">#}
+{#                <label for="password">Password</label>#}
+{#                <input type="password" id="password" name="password" required placeholder="Enter Password">#}
+{#            </div>#}
             <button type="submit" class="login-button">Login</button>
         </form>
     <div style="padding-top: 10px;">No account yet? Sign up <a href="{% url 'signup' %}">here</a>!</div>

@@ -64,22 +64,24 @@
             </div>
             <div style="padding-left: 20px; padding-bottom: 20px;">
                 {% if user.is_authenticated %}
-                    <h3>Leave a review</h3>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="star-rating">
-                            {% for i in "12345" %}
-                                <input type="radio" id="star{{ forloop.revcounter }}" name="star_rating"
-                                       value="{{ forloop.revcounter }}"
-                                       {% if user_rating and user_rating.star_rating == forloop.revcounter %}checked{% endif %}>
-                                <label for="star{{ forloop.revcounter }}">★</label>
-                            {% endfor %}
-                        </div>
-                        <textarea name="feedback" placeholder="Leave feedback">{{ user_rating.feedback }}</textarea>
-                        <button style="margin-bottom: 23px;" type="submit" class="btn btn-info">Submit Rating</button>
-                    </form>
+{#                    {% if user_rating %}#}
+                        <h3>Leave a review</h3>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="star-rating">
+                                {% for i in "12345" %}
+                                    <input type="radio" id="star{{ forloop.revcounter }}" name="star_rating"
+                                           value="{{ forloop.revcounter }}"
+                                           {% if user_rating and user_rating.star_rating == forloop.revcounter %}checked{% endif %}>
+                                    <label for="star{{ forloop.revcounter }}">★</label>
+                                {% endfor %}
+                            </div>
+                            <textarea name="feedback" placeholder="Leave feedback">{{ user_rating.feedback }}</textarea>
+                            <button style="margin-bottom: 23px;" type="submit" class="btn btn-info">Submit Rating
+                            </button>
+                        </form>
                 {% else %}
-                    <p><a href="{% url 'login' %}">Log in</a> to rate this product.</p>
+                    <p><a href="{% url 'login' %}?next={% url 'product_detail' product.pk %}">Log in</a> to rate this product.</p>
                 {% endif %}
                 <br>
                 <h3>{% if product.ratings.count == 0 %}
@@ -98,11 +100,15 @@
                             </div>
                             <div style="padding-top: 35px;">{{ rating.star_rating }}/5
                                 <p>Comment: {{ rating.feedback }}
-                                </p></div>
+                                </p>
+                                {% if rating.user == user %}
+                                    Delete comment placeholder
+                                {% endif %}
+                            </div>
                         {% endif %}
                     </div>
                 {% endfor %}
-                <a href="{% url 'home' %}" class="btn btn-success">Homepage</a>
+                <a href="{% url 'home' %}" class="btn btn-success" style="margin-top: 20px;">Homepage</a>
             </div>
         </div>
     </div>

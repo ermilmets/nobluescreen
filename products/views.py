@@ -36,6 +36,10 @@ class HomePageView(ListView):
             user_cart_items = CartItem.objects.filter(cart=user_cart)
             for cart_item in user_cart_items:
                 item_total += cart_item.quantity
+            if item_total == 0:
+                cart = self.request.session.get('cart', {})
+                for item, quantity in cart.items():
+                    item_total += quantity
         else:
             cart = self.request.session.get('cart', {})
             for item, quantity in cart.items():
@@ -69,6 +73,10 @@ class ProductDetailView(DetailView, FormView):
             user_cart_items = CartItem.objects.filter(cart=user_cart)
             for cart_item in user_cart_items:
                 item_total += cart_item.quantity
+            if item_total == 0:
+                cart = self.request.session.get('cart', {})
+                for item, quantity in cart.items():
+                    item_total += quantity
         else:
             cart = self.request.session.get('cart', {})
             for item, quantity in cart.items():
@@ -96,7 +104,7 @@ class ProductDetailView(DetailView, FormView):
 
     def form_invalid(self, form):
         messages.error(self.request, 'Error, when leaving a feedback, '
-                                     'please fill out both commentfield and ratingfield!')
+                                     'please include a star-rating!')
         return redirect('product_detail', pk=self.get_object().id)
 
 
@@ -122,6 +130,10 @@ class GamePlatformView(ListView):
             user_cart_items = CartItem.objects.filter(cart=user_cart)
             for cart_item in user_cart_items:
                 item_total += cart_item.quantity
+            if item_total == 0:
+                cart = self.request.session.get('cart', {})
+                for item, quantity in cart.items():
+                    item_total += quantity
         else:
             cart = self.request.session.get('cart', {})
             for item, quantity in cart.items():
@@ -164,11 +176,13 @@ class RemoveFromCartView(View):
             product = get_object_or_404(Product, pk=product_id)
             user_cart = get_object_or_404(Cart, user=request.user)
             cart_item, created = CartItem.objects.get_or_create(cart=user_cart, product=product)
+            user_cart_items = CartItem.objects.filter(cart=user_cart)
             cart_item.quantity -= quantity
             if cart_item.quantity <= 0:
                 cart_item.delete()
-                if not user_cart:
-                    del cart
+                if not user_cart_items.exists():
+                    if request.session.get('cart'):
+                        del request.session['cart']
             else:
                 cart_item.save()
         product_id = str(product_id)
@@ -327,6 +341,10 @@ class AboutUsView(ListView):
             user_cart_items = CartItem.objects.filter(cart=user_cart)
             for cart_item in user_cart_items:
                 item_total += cart_item.quantity
+            if item_total == 0:
+                cart = self.request.session.get('cart', {})
+                for item, quantity in cart.items():
+                    item_total += quantity
         else:
             cart = self.request.session.get('cart', {})
             for item, quantity in cart.items():
@@ -348,6 +366,10 @@ class ContactUsView(ListView):
             user_cart_items = CartItem.objects.filter(cart=user_cart)
             for cart_item in user_cart_items:
                 item_total += cart_item.quantity
+            if item_total == 0:
+                cart = self.request.session.get('cart', {})
+                for item, quantity in cart.items():
+                    item_total += quantity
         else:
             cart = self.request.session.get('cart', {})
             for item, quantity in cart.items():
