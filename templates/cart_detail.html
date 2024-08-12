@@ -21,18 +21,18 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div style="width: 60%;">
                             <img src="{{ item.product.image.url }}" height="45px" width="50px" alt="img">
-                            {{ item.product.name }} ({{ item.product.platform }}) - {{ item.quantity }} x
+                            {{ item.product.name }} ({{ item.product.platform }}) -
                             € {{ item.product.price }}</div>
                         <div style="display: flex; font-size: 20px;">
-                            <form method="post" action="{% url 'add_to_cart' item.product.id %}" style="display:inline-block; padding-right: 20px;">
+                            <form method="post" action="{% url 'add_to_cart' item.product.id %}" style="display:inline-block; padding-right: 10px;">
                                 {% csrf_token %}
                                 <button type="submit"
                                         style="background-color: white; border: none; color: red;"><i
                                         class="fa fa-plus-square" style="color: limegreen"></i>
                                 </button>
-                            </form>
+                            </form>x {{ item.quantity }}
                             <form method="post" action="{% url 'remove_from_cart' item.product.id %}"
-                                  style="display:inline-block;">
+                                  style="display:inline-block; padding-left: 10px;">
                                 {% csrf_token %}
                                 <button type="submit"
                                         style="background-color: white; border: none; color: red;"><i
