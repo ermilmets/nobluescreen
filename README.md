@@ -5,7 +5,6 @@ period and console.<br>
 
 ![nobluescreen_main.jpg](nobluescreen_main.jpg)
 
-
 The website is featured by an essential but practical weather widget, and it allows the user to:
  <ul>
 <li>add the products he would like to purchase to the cart;</li>
@@ -36,8 +35,16 @@ The project has an active admin panel which is accessible via admin/. All CRUD o
 </ul>
 </li>
 <li>
-
 Install postgres database and properly set it on the machine.
+</li>
+<li>
+Run migrations<br>
+<code>python manage.py makemigrations</code><br>
+<code>python manage.py migrate</code>
+</li>
+<li>
+Run the server and access the page at the path indicated in the terminal<br>
+<code>python manage.py runserver</code><br>
 </li>
 </ol>
 <h4>Local installation (Windows)</h4>
@@ -47,6 +54,3 @@ Install postgres database and properly set it on the machine.
 <code>python -m venv venv</code><br>
 <code>.\venv\Script\activate</code></li>
 </ol>
-
-<h3>Testing</h3>
-Launch the tests with <code>pytest tests</code>
